@@ -1,14 +1,11 @@
 //Ethers.js allows us to interract with blockchains
-import { providers, Wallet, ContractFactory } from 'ethers';
-import fs from 'fs-extra';
-const ganacheRcpUrl = 'http://127.0.0.1:7545';
+const ethers = require('ethers');
+const fs = require('fs-extra');
+require('dotenv').config();
 
 async function main() {
-  const provider = new providers.JsonRpcProvider(ganacheRcpUrl);
-  const wallet = new Wallet(
-    '52c5c26f12d27e2f2f6c9cfa3cdf54cff05558ce1b500c88aff7a9c50563a3e4',
-    provider,
-  );
+  const provider = new ethers.providers.JsonRpcProvider(process.env.RPC_URL);
+  const wallet = new ethers.Wallet(process.env.PRIVATE_KEY, provider);
 
   const abi = fs.readFileSync('./SimpleStorage_sol_SimpleStorage.abi', 'utf-8');
   const binary = fs.readFileSync(
@@ -16,7 +13,7 @@ async function main() {
     'utf-8',
   );
 
-  const contractFactory = new ContractFactory(abi, binary, wallet);
+  const contractFactory = new ethers.ContractFactory(abi, binary, wallet);
   console.log('Deploying, please wait...');
   try {
     const contract = await contractFactory.deploy();
