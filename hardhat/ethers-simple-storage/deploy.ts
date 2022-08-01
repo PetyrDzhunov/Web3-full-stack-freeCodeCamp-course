@@ -1,14 +1,23 @@
 //Ethers.js allows us to interract with blockchains
-const ethers = require("ethers");
-const fs = require("fs-extra");
-require("dotenv").config();
+// const ethers = require("ethers");
+// const fs = require("fs-extra");
+// require("dotenv").config();
+
+import { ethers } from "ethers";
+import * as fs from "fs-extra";
+import "dotenv/config";
+import { BytesLike } from "ethers/lib/utils";
 
 async function main() {
     const provider = new ethers.providers.JsonRpcProvider(process.env.RPC_URL);
     const encryptedJson = fs.readFileSync("./.encryptedKey.json", "utf-8");
-    const wallet = new ethers.Wallet(process.env.PRIVATE_KEY, provider);
+    const wallet = new ethers.Wallet(
+        process.env.PRIVATE_KEY as BytesLike,
+        provider
+    );
 
-    // const wallet = new ethers.Wallet.fromEncryptedJsonSync(
+    // const wallet = new ethers.Wallet.fromEncryptedJsonSync(s
+
     //   encryptedJson,
     //   process.env.PRIVATE_KEY_PASSWORD,
     // );
@@ -49,6 +58,7 @@ async function main() {
 
         //since its a view function and called outside of a contract function call
         // it does not cost any gas
+        console.log(`Contract address: ${contract.address}`);
         const currentFavouriteNumber = await contract.retrieve();
         console.log(
             `Current Favorite Number: ${currentFavouriteNumber.toString()}`
