@@ -10,7 +10,6 @@ async function main() {
     console.log(`Deployed contract to ${simpleStorage.address}`);
     // ONLY verify if we are on the rinkeby(chainID=4) test network
     // and we have etherscan api key in the .env file
-    console.log(process.env.ETHERSCAN_API_KEY);
     if (network.config.chainID === 4 && process.env.ETHERSCAN_API_KEY) {
         console.log("Waiting for blocks tx...");
         await simpleStorage.deployTransaction.wait(6); // wait 6 blocks to be mined and then run verification proccess
