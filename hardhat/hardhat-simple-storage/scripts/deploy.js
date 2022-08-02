@@ -10,10 +10,19 @@ async function main() {
     console.log(`Deployed contract to ${simpleStorage.address}`);
     // ONLY verify if we are on the rinkeby(chainID=4) test network
     // and we have etherscan api key in the .env file
-    if (network.config.chainId === 4 && process.env.ETHERSCAN_API_KEY) {
+    console.log(process.env.ETHERSCAN_API_KEY);
+    if (network.config.chainID === 4 && process.env.ETHERSCAN_API_KEY) {
+        console.log("Waiting for blocks tx...");
         await simpleStorage.deployTransaction.wait(6); // wait 6 blocks to be mined and then run verification proccess
         await verify(simpleStorage.address, []);
     }
+
+    const currentValue = await simpleStorage.retrieve();
+    console.log(`Current value is ${currentValue}`);
+    const transactionResponse = await simpleStorage.store(7);
+    await transactionResponse.wait(1);
+    const updatedValue = await simpleStorage.retrieve();
+    console.log(`Updated value is: ${updatedValue}`);
 }
 
 async function verify(contractAddress, args) {
