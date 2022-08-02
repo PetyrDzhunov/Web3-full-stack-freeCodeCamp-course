@@ -1,8 +1,11 @@
-require("@nomicfoundation/hardhat-toolbox");
-require("@nomiclabs/hardhat-etherscan");
-require("dotenv").config();
-require("./tasks/block-number");
-require("hardhat-gas-reporter");
+import "@nomicfoundation/hardhat-toolbox";
+import "@nomiclabs/hardhat-etherscan";
+import "dotenv/config";
+import "./tasks/block-number";
+import "hardhat-gas-reporter";
+import "solidity-coverage";
+import "@nomiclabs/hardhat-ethers";
+import "@typechain/hardhat";
 /** @type import('hardhat/config').HardhatUserConfig */
 
 const RINKEBY_RPC_URL = process.env.RINKEBY_RPC_URL || "";
