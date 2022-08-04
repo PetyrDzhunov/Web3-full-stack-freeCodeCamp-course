@@ -37,19 +37,31 @@ contract FundMe {
 		* @dev This implements price feeds as our library
 	 */
     function fund() public payable {
-        require(msg.value.getConversionRate(priceFeed) >=  MINIMUM_USD,"Didn't send enough");   //1e18 = 1*10**18 == 1ETH (in wei)
+        require(msg.value.getConversionRate(s_priceFeed) >=  MINIMUM_USD,"Didn't send enough");   //1e18 = 1*10**18 == 1ETH (in wei)
         s_funders.push(msg.sender);
         s_addressToAmountFunded[msg.sender] = msg.value;
     }
 
     function withdraw() public onlyOwner {
         for(uint256 funderIndex = 0; funderIndex < s_funders.length; funderIndex++) {
-            address s_funder =  funders[funderIndex];
+            address funder = s_funders[funderIndex];
             s_addressToAmountFunded[funder] = 0;
         }
 
-        funders = new address[](0); // reseting the array
-       (bool callSuccess,) =  payable(msg.sender).call{value: address(this).balance}("");
+        s_funders = new address[](0); // reseting the array
+       (bool callSuccess,) =  i_owner.call{value: address(this).balance}("");
        require(callSuccess, "Call failed");
     }
+
+		function cheaperWithdraw() public onlyOwner {
+			address[] memory funders = s_funders;
+			// only mappings can't be in memory;
+			for(uint256 funderIndex=0; funderIndex < funders.length; funderIndex++) {
+				address funder = funders[funderIndex];
+				s_addressToAmountFunded[funder] = 0;
+			}
+			s_funders = new address[](0);
+       (bool callSuccess,) =  i_owner.call{value: address(this).balance}("");
+       require(callSuccess, "Call failed");
+		}
 }
