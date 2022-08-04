@@ -31,15 +31,11 @@ contract FundMe {
         i_owner = msg.sender;
 				priceFeed = AggregatorV3Interface(priceFeedAddress);
     }
-		
-    receive() external payable {
-        fund();
-    }
 
-    fallback() external payable {
-        fund();
-    }
-
+	/**
+		* @notice This function funds this contract
+		* @dev This implements price feeds as our library
+	 */
     function fund() public payable {
         require(msg.value.getConversionRate(priceFeed) >=  MINIMUM_USD,"Didn't send enough");   //1e18 = 1*10**18 == 1ETH (in wei)
         funders.push(msg.sender);
