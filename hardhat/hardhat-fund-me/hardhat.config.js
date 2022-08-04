@@ -1,7 +1,7 @@
-require('@nomicfoundation/hardhat-toolbox');
-require('hardhat-deploy');
-require('hardhat-gas-reporter');
-require('dotenv').config();
+require("@nomicfoundation/hardhat-toolbox");
+require("hardhat-deploy");
+require("hardhat-gas-reporter");
+require("dotenv").config();
 
 /** @type import('hardhat/config').HardhatUserConfig */
 
@@ -12,7 +12,7 @@ const ETHERSCAN_API_KEY = process.env.ETHERSCAN_API_KEY;
 
 module.exports = {
   solidity: {
-    compilers: [{ version: '0.8.8' }, { version: '0.6.6' }],
+    compilers: [{ version: "0.8.8" }, { version: "0.6.6" }],
   },
   networks: {
     rinkeby: {
@@ -27,12 +27,12 @@ module.exports = {
   },
   gasReporter: {
     enabled: true,
-    outputFile: 'gas-report.txt',
+    outputFile: "gas-report.txt",
     noColors: true,
-    currency: 'USD',
-    coinmarketcap: COINMARKETCAP_API_KEY,
+    currency: "USD",
+    // coinmarketcap: COINMARKETCAP_API_KEY,
   },
-  defaultNetwork: 'hardhat',
+  defaultNetwork: "hardhat",
   namedAccounts: {
     deployer: {
       default: 0,
