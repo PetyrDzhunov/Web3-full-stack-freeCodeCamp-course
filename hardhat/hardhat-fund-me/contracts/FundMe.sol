@@ -13,12 +13,12 @@ contract FundMe {
 
     using PriceConvertor for uint256;
     uint256 public constant MINIMUM_USD = 50 * 1e18;
-    address[] public s_funders;
-    mapping (address => uint256) public s_addressToAmountFunded;
+    address[] private s_funders;
+    mapping (address => uint256) private s_addressToAmountFunded;
     address private immutable i_owner;
     // we pass the address price feed depending on the chain we are on
 
-		AggregatorV3Interface public s_priceFeed;
+		AggregatorV3Interface private s_priceFeed;
 		     
     modifier onlyOwner{
         if(msg.sender != i_owner) {
@@ -67,15 +67,15 @@ contract FundMe {
 
 		function getOwner() public view returns(address) {
 			return i_owner;
-		};
+		}
 
-		function getFunders(uint256 index) public view returns(address) {
+		function getFunder(uint256 index) public view returns(address) {
 			return s_funders[index];
-		};
+		}
 
 		function getAddressToAmountFunded(address funder) public view returns(uint256) {
-			returns s_addressToAmountFunded[funder];
-		};
+			return s_addressToAmountFunded[funder];
+		}
 
 		function getPriceFeed() public view returns (AggregatorV3Interface) {
 			return s_priceFeed;
