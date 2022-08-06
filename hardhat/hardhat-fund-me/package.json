@@ -1,13 +1,24 @@
 {
-  "devDependencies": {
-    "@chainlink/contracts": "^0.4.2",
-    "@nomicfoundation/hardhat-toolbox": "^1.0.2",
-    "@nomiclabs/hardhat-ethers": "npm:hardhat-deploy-ethers@^0.3.0-beta.13",
-    "ethers": "^5.6.9",
-    "hardhat": "^2.10.1",
-    "hardhat-deploy": "^0.11.12"
-  },
-  "dependencies": {
-    "dotenv": "^16.0.1"
-  }
+    "name": "hardhat-fund-me",
+    "author": "Petar Dzhunov",
+    "version": "1.0.0",
+    "devDependencies": {
+        "@chainlink/contracts": "^0.4.2",
+        "@nomicfoundation/hardhat-toolbox": "^1.0.2",
+        "@nomiclabs/hardhat-ethers": "npm:hardhat-deploy-ethers@^0.3.0-beta.13",
+        "ethers": "^5.6.9",
+        "hardhat": "^2.10.1",
+        "hardhat-deploy": "^0.11.12"
+    },
+    "dependencies": {
+        "dotenv": "^16.0.1"
+    },
+    "scripts": {
+        "test": "npx hardhat test",
+        "test:staging": "npx hardhat test --network rinkeby",
+        "lint": "npx solhint contracts/*.sol",
+        "lint:fix": "npx solhint contract/*.sol --fix",
+        "format": "npx prettier --write",
+        "coverage": "npx hardhat coverage"
+    }
 }
