@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <script type="module" defer src="index.js"></script>
+
+    <title>Fund Me App</title>
+</head>
+
+<body>
+    Hello!
+    <button id="connectButton" onclick="connect()">Connect</button>
+    <script>
+        const ethereum = window.ethereum;
+
+        const connect = async() => {
+            if (typeof ethereum !== 'undefined') {
+                await ethereum.request({
+                    method: 'eth_requestAccounts',
+                });
+                document.getElementById('connectButton').innerHTML = 'Connected!';
+            } else {
+                document.getElementById('connectButton').innerHTML =
+                    'Please install Metamask!';
+            }
+        };
+    </script>
+</body>
+
+</html>
