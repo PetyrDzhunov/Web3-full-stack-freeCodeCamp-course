@@ -9,22 +9,8 @@
 
 <body>
     Hello!
-    <button id="connectButton" onclick="connect()">Connect</button>
-    <script>
-        const ethereum = window.ethereum;
-
-        const connect = async() => {
-            if (typeof ethereum !== 'undefined') {
-                await ethereum.request({
-                    method: 'eth_requestAccounts',
-                });
-                document.getElementById('connectButton').innerHTML = 'Connected!';
-            } else {
-                document.getElementById('connectButton').innerHTML =
-                    'Please install Metamask!';
-            }
-        };
-    </script>
+    <button id="connectButton">Connect</button>
+    <button id="fundButton">Fund</button>
 </body>
 
 </html>
