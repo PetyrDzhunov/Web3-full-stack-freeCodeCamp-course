@@ -3,6 +3,7 @@ import { abi, contractAddress } from './constants.js ';
 const ethereum = window.ethereum;
 const connectBtn = document.getElementById('connectButton');
 const fundBtn = document.getElementById('fundButton');
+const balanceBtn = document.getElementById('balanceButton');
 
 const checkIfWalletExist = async (button) => {
   if (typeof ethereum !== 'undefined') {
@@ -52,6 +53,13 @@ const fund = async () => {
   }
 };
 
+const getBalance = async () => {
+  await checkIfWalletExist(balanceBtn);
+  const provider = new ethers.providers.Web3Provider(ethereum);
+  const balance = await provider.getBalance(contractAddress);
+  console.log(ethers.utils.formatEther(balance));
+};
+
 function listenForTransactionMine(transactionResponse, provider) {
   console.log(`Mining ${transactionResponse.hash}...`);
   //create a listener for the blockchain
@@ -69,3 +77,4 @@ function listenForTransactionMine(transactionResponse, provider) {
 
 connectBtn.addEventListener('click', connect);
 fundBtn.addEventListener('click', fund);
+balanceBtn.addEventListener('click', getBalance);
