@@ -30,8 +30,8 @@ const connect = async () => {
   }
 };
 
-const fund = async (ethAmount) => {
-  ethAmount = '0.1';
+const fund = async () => {
+  const ethAmount = document.getElementById('ethAmount').value;
   try {
     await checkIfWalletExist(fundBtn);
     console.log(`Funding with ${ethAmount}...`);
