@@ -4,6 +4,7 @@ const ethereum = window.ethereum;
 const connectBtn = document.getElementById('connectButton');
 const fundBtn = document.getElementById('fundButton');
 const balanceBtn = document.getElementById('balanceButton');
+const withdrawBtn = document.getElementById('withdrawButton');
 
 const checkIfWalletExist = async (button) => {
   if (typeof ethereum !== 'undefined') {
@@ -75,6 +76,21 @@ function listenForTransactionMine(transactionResponse, provider) {
   });
 }
 
+const withdraw = async () => {
+  await checkIfWalletExist(withdrawBtn);
+  const provider = new ethers.providers.Web3Provider(ethereum);
+  const signer = provider.getSigner();
+  console.log('Withdrawing...');
+  const contract = new ethers.Contract(contractAddress, abi, signer);
+  try {
+    const transactionResponse = await contract.withdraw();
+    await listenForTransactionMine(transactionResponse, provider);
+  } catch (e) {
+    console.log(e);
+  }
+};
+
 connectBtn.addEventListener('click', connect);
 fundBtn.addEventListener('click', fund);
 balanceBtn.addEventListener('click', getBalance);
+withdrawBtn.addEventListener('click', withdraw);

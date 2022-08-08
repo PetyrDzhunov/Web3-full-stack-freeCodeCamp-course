@@ -39,7 +39,7 @@ contract FundMe {
     function fund() public payable {
         require(msg.value.getConversionRate(s_priceFeed) >=  MINIMUM_USD,"Didn't send enough");   //1e18 = 1*10**18 == 1ETH (in wei)
         s_funders.push(msg.sender);
-        s_addressToAmountFunded[msg.sender] += msg.value;
+        s_addressToAmountFunded[msg.sender] = msg.value;
     }
 
     function withdraw() public onlyOwner {
