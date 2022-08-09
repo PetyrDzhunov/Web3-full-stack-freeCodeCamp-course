@@ -156,8 +156,21 @@ contract Raffle is VRFConsumerBaseV2,KeeperCompatibleInterface {
 		function getRaffleState() public view returns(RaffleState) {
 			return s_raffleState;
 		}
-
+	// it is a pure function since its a constant and we're not reading from the storage
+	// but from the bytecode
 		function getNumWords() public pure returns(uint256) {
 			return NUM_WORDS;
+		}
+
+		function getNumberOfPlayers() public view returns(uint256) {
+			return s_players.length;
+		}
+
+		function getLatestTimeStamp() public view returns(uint256) {
+			return s_lastTimeStamp;
+		}
+
+		function getRequestConfirmations() public pure returns(uint256) {
+			return REQUEST_CONFIRMATIONS;
 		}
  }
