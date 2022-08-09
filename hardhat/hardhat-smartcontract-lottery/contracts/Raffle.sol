@@ -66,8 +66,8 @@ contract Raffle is VRFConsumerBaseV2,KeeperCompatibleInterface {
 		i_subscriptionId = subscriptionId;
 		i_callbackGasLimit = callbackGasLimit;
 		s_raffleState = RaffleState.OPEN;
-		s.lastTimeStamp = block.timestamp;
-		i_interval = interval
+		s_lastTimeStamp = block.timestamp;
+		i_interval = interval;
 	}
 
 		function enterRaffle() public payable {
@@ -94,12 +94,12 @@ contract Raffle is VRFConsumerBaseV2,KeeperCompatibleInterface {
 			4.The lottery should be in an "open" state
 		*/
 
-		function checkUpKeep(bytes calldata /*checkData*/) public override returns(bool upkeepNeeded,bytes memory /*performData*/) {
+		function checkUpkeep(bytes memory /*checkData*/) public override returns(bool upkeepNeeded,bytes memory /*performData*/) {
 			bool isOpen = RaffleState.OPEN == s_raffleState;
-			bool timePassed = ((block.timestamp - s_lastTimeStamp) > i_interval)
+			bool timePassed = ((block.timestamp - s_lastTimeStamp) > i_interval);
 			bool hasPlayers = (s_players.length > 0);
 			bool hasBalance = address(this).balance > 0;
-			upKeepNeeded (isOpen && timePassed && hasPlayers && hasBalance);
+			 upkeepNeeded = (isOpen && timePassed && hasPlayers && hasBalance);
 		}
 
 
@@ -109,8 +109,8 @@ contract Raffle is VRFConsumerBaseV2,KeeperCompatibleInterface {
 			//We need chainlink VRF and chainlink Keepers
 			//Request the random number
 			// Once we get it do something with it 
-			(bool upKeepNeeded,) = checkUpkeep("");
-			if(!upKeepneeded) {
+			(bool upkeepNeeded,) = checkUpkeep("");
+			if(!upkeepNeeded) {
 				revert Raffle_UpkeepNotNeeded(address(this).balance, s_players.length, uint256(s_raffleState));
 			}
 			s_raffleState = RaffleState.CALCULATING;
@@ -128,7 +128,7 @@ contract Raffle is VRFConsumerBaseV2,KeeperCompatibleInterface {
 
 		function fulfillRandomWords(uint256 /*requestId*/,uint256[] memory randomWords)
 		 internal override {
-			 uint256 indexOfWinner = randomWords[0] % s.players.length;
+			 uint256 indexOfWinner = randomWords[0] % s_players.length;
 			 address payable recentWinner = s_players[indexOfWinner];
 			 s_recentWinner = recentWinner;
 			 s_raffleState = RaffleState.OPEN;
@@ -152,4 +152,12 @@ contract Raffle is VRFConsumerBaseV2,KeeperCompatibleInterface {
 		function getRecentWinner() public view returns(address) {
 			return s_recentWinner;
 		}
-}
+
+		function getRaffleState() public view returns(RaffleState) {
+			return s_raffleState;
+		}
+
+		function getNumWords() public pure returns(uint256) {
+			return NUM_WORDS;
+		}
+ }
