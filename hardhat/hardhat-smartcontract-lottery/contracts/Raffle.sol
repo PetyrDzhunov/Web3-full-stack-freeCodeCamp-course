@@ -84,7 +84,7 @@ contract Raffle is VRFConsumerBaseV2,KeeperCompatibleInterface {
 			// named events with the function name reversed
 			emit RaffleEnter(msg.sender);
 		}
-		/* 
+		/**
 		* @dev This is the function that the Chainlink Keeper nodes call
 		* They look for the `upkeepNeeded` to return true
 		* The following should be true in order to return true:
