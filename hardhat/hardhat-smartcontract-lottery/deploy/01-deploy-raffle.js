@@ -3,6 +3,7 @@ const {
   developmentChains,
   networkConfig,
 } = require('../helper-hardhat-config');
+const { verify } = require('../utils/verify');
 
 const VRF_SUB_FUND_AMOUNT = ethers.utils.parseEther('2');
 
@@ -16,7 +17,7 @@ module.exports = async function ({ getNamedAccounts, deployments }) {
     const vrfCoordinatorV2Mock = await ethers.getContract(
       'VRFCoordinatorV2Mock',
     );
-    vrfCoordinatorV2Address = vrfCoordinatorV2Mock;
+    vrfCoordinatorV2Address = vrfCoordinatorV2Mock.address;
     const transactionResponse = await vrfCoordinatorV2Mock.createSubscription();
     const transactionReceipt = await transactionResponse.wait(1); // in this receipt there's an event that is emitted with subscription that we can get
     subscriptionId = transactionReceipt.events[0].args.subId;
@@ -46,8 +47,19 @@ module.exports = async function ({ getNamedAccounts, deployments }) {
 
   const raffle = await deploy('Raffle', {
     from: deployer,
-    args: [],
+    args: args,
     log: true,
     waitConfirmatons: network.config.blockConfirmations || 1,
   });
+
+  if (
+    !developmentChains.includes(network.name) &&
+    process.env.ETHERSCAN_API_KEY
+  ) {
+    log('Veryfying...');
+    await verify(raffle.address, args);
+  }
+  log('----------------------------------------------');
 };
+
+module.exports.tags = ['all', 'raffle'];
