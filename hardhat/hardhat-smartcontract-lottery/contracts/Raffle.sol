@@ -1,6 +1,6 @@
 // Enter the lottery (paying some amount)
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.8.4;
+pragma solidity ^0.8.7;
 //Pick a random wi8ner (verifiably random)
 //Winner to be selected every X minutes -> completely automated
 //Chainlink Oracle -> Randomness, Automated Exectuion(Chainlink Keepers)
@@ -141,7 +141,7 @@ contract Raffle is VRFConsumerBaseV2,KeeperCompatibleInterface {
 				emit WinnerPicked(recentWinner);
 		}
 
-		function getIntranceFee() public view returns(uint256) {
+		function getEntranceFee() public view returns(uint256) {
 			return i_entranceFee;
 		}
 		
