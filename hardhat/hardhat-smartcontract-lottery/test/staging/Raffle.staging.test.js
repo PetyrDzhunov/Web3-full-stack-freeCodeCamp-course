@@ -33,22 +33,20 @@ developmentChains.includes(network.name)
             raffle.once('WinnerPicked', async () => {
               console.log('WinnerPicked event fired!');
               try {
-                setTimeout(async () => {
-                  const recentWinner = await raffle.getRecentWinner();
-                  const raffleState = await raffle.getRaffleState();
-                  const winnerEndingBalance = await accounts[0].getBalance();
-                  const endingTimeStamp = await raffle.getLatestTimeStamp();
+                const recentWinner = await raffle.getRecentWinner();
+                const raffleState = await raffle.getRaffleState();
+                const winnerEndingBalance = await accounts[0].getBalance();
+                const endingTimeStamp = await raffle.getLatestTimeStamp();
 
-                  await expect(raffle.getPlayer(0)).to.be.reverted;
-                  assert.equal(recentWinner.toString(), accounts[0].address);
-                  assert.equal(raffleState, 0);
-                  assert.equal(
-                    winnerEndingBalance.toString(),
-                    winnerStartingBalance.add(raffleEntranceFee).toString(),
-                  );
-                  assert(endingTimeStamp > startingTimeStamp);
-                  resolve();
-                }, 15000);
+                await expect(raffle.getPlayer(0)).to.be.reverted;
+                assert.equal(recentWinner.toString(), accounts[0].address);
+                assert.equal(raffleState, 0);
+                assert.equal(
+                  winnerEndingBalance.toString(),
+                  winnerStartingBalance.add(raffleEntranceFee).toString(),
+                );
+                assert(endingTimeStamp > startingTimeStamp);
+                resolve();
               } catch (error) {
                 console.log(error);
                 reject(error);
@@ -57,7 +55,8 @@ developmentChains.includes(network.name)
             //Then entering the raffle
             console.log('Entering Raffle...');
             await raffle.enterRaffle({ value: raffleEntranceFee });
-            const txReceipt = await tx.wait(1);
+            console.log('Raffle was entered');
+            // await tx.wait(1);
             console.log('Ok, time to wait...');
             const winnerStartingBalance = await accounts[0].getBalance();
             // and this code WONT complete until our listener has finished listening!
