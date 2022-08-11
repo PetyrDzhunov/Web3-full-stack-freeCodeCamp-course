@@ -2,8 +2,14 @@ import { useEffect } from 'react';
 import { useMoralis } from 'react-moralis';
 
 export default function ManualHeader() {
-  const { enableWeb3, account, isWeb3Enabled, Moralis, deactivateWeb3 } =
-    useMoralis();
+  const {
+    enableWeb3,
+    account,
+    isWeb3Enabled,
+    Moralis,
+    deactivateWeb3,
+    isWeb3EnableLoading,
+  } = useMoralis();
 
   const connect = async () => {
     await enableWeb3();
@@ -40,7 +46,9 @@ export default function ManualHeader() {
           {account.slice(account.length - 4)}
         </div>
       ) : (
-        <button onClick={connect}>Connect</button>
+        <button onClick={connect} disabled={isWeb3EnableLoading}>
+          Connect
+        </button>
       )}
     </div>
   );
