@@ -90,8 +90,8 @@
       ]
     },
     "C:\\Users\\User\\OneDrive\\Desktop\\Solidity,ethers.js , hardhat, web3 youtube course\\hardhat\\hardhat-smartcontract-lottery\\node_modules\\@chainlink\\contracts\\src\\v0.8\\interfaces\\VRFCoordinatorV2Interface.sol": {
-      "lastModificationDate": 1660137701470,
-      "contentHash": "56ec852a2aeddf81bf5a5720a7fc6a63",
+      "lastModificationDate": 1660228040024,
+      "contentHash": "8c9ed3426b676f67ee200a2bec96e224",
       "sourceName": "@chainlink/contracts/src/v0.8/interfaces/VRFCoordinatorV2Interface.sol",
       "solcConfig": {
         "version": "0.8.9",
@@ -174,8 +174,8 @@
       ]
     },
     "C:\\Users\\User\\OneDrive\\Desktop\\Solidity,ethers.js , hardhat, web3 youtube course\\hardhat\\hardhat-smartcontract-lottery\\node_modules\\@chainlink\\contracts\\src\\v0.8\\mocks\\VRFCoordinatorV2Mock.sol": {
-      "lastModificationDate": 1660137701475,
-      "contentHash": "0e99ed258a59dc48bc432008b39453cd",
+      "lastModificationDate": 1660228040046,
+      "contentHash": "a78f72f6c18077e727bc06d7f96b2031",
       "sourceName": "@chainlink/contracts/src/v0.8/mocks/VRFCoordinatorV2Mock.sol",
       "solcConfig": {
         "version": "0.8.9",
