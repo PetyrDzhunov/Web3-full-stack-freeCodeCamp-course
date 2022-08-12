@@ -1,4 +1,4 @@
-import { ConnectButton } from '@web3uikit/web3';
+import { ConnectButton } from 'web3uikit';
 
 export default function Header() {
   return (
