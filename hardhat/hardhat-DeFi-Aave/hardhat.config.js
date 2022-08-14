@@ -5,7 +5,6 @@ require('solidity-coverage');
 require('hardhat-gas-reporter');
 require('hardhat-contract-sizer');
 require('dotenv').config();
-require('@nomicfoundation/hardhat-chai-matchers');
 
 const RINKEBY_RPC_URL = process.env.RINKEBY_RPC_URL;
 const PRIVATE_KEY = process.env.PRIVATE_KEY;
@@ -33,7 +32,13 @@ module.exports = {
     currency: 'USD',
     coinmarketcap: COINMARKETCAP_API_KEY,
   },
-  solidity: '0.8.9',
+  solidity: {
+    compilers: [
+      { version: '0.8.7' },
+      { version: '0.6.6' },
+      { version: '0.4.19' },
+    ],
+  },
   namedAccounts: {
     deployer: {
       default: 0,
