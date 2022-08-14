@@ -7,7 +7,6 @@ async function getWeth() {
     // call the deposit function on the WETH contract;
     // abi , contract address
     // 0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2 - mainnet WETH address
-    console.log(ethers)
     const iWeth = await ethers.getContractAt(
         "IWeth",
         "0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2",
@@ -20,4 +19,4 @@ async function getWeth() {
     console.log(`Got ${wethBalance.toString()} WETH`)
 }
 
-module.exports = { getWeth }
+module.exports = { getWeth, AMOUNT }
