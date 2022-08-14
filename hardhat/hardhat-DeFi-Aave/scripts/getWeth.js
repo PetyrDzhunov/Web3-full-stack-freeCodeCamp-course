@@ -1,6 +1,6 @@
 const { ethers } = require('ethers');
 
-const { getNamedAccounts } = requrie('hardhat');
+const { getNamedAccounts } = require('hardhat');
 
 const AMOUNT = ethers.utils.parseEther('0.02');
 
@@ -9,9 +9,11 @@ async function getWeth() {
   // call the deposit function on the WETH contract;
   // abi , contract address
   // 0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2 - mainnet WETH address
+  console.log(ethers);
   const iWeth = await ethers.getContractAt(
     'IWeth',
-    '0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2'.deployer,
+    '0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2',
+    deployer,
   );
   // get this weth contract with the abi of Iweth at this address connected to deployer
   const tx = await iWeth.deposit({ value: AMOUNT });
