@@ -26,6 +26,22 @@ async function main() {
     // amount of Dai we can borrow - conver it from the available amount  from the ETH available
     const amountDaiToBorrow = availableBorrowsETH.toString() * 0.95 * (1 / daiPrice.toNumber())
     console.log(`You can borrow ${amountDaiToBorrow} DAI`)
+    console.log(amountDaiToBorrow)
+    const amountDaiToBorrowWei = ethers.utils.parseEther(amountDaiToBorrow.toString())
+    await borrowDai(
+        networkConfig[network.config.chainId]["daiToken"],
+        lendingPool,
+        amountDaiToBorrowWei,
+        deployer
+    )
+
+    await getBorrowUserData(lendingPool, deployer)
+}
+
+async function borrowDai(daiAddress, lendingPool, amountDaiToBorrowWei, account) {
+    const borrowTx = await lendingPool.borrow(daiAddress, amountDaiToBorrowWei, 1, 0, account)
+    await borrowTx.wait(1)
+    console.log(`You've borrowed!`)
 }
 
 async function getDaiPrice() {
@@ -33,7 +49,6 @@ async function getDaiPrice() {
         "AggregatorV3Interface",
         networkConfig[network.config.chainId]["daiEthPriceFeed"]
     )
-
     const price = (await daiEthPriceFeed.latestRoundData())[1]
     console.log(`The DAI/ETH price is ${price.toString()}`)
     return price
