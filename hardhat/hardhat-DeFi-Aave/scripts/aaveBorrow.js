@@ -26,16 +26,21 @@ async function main() {
     // amount of Dai we can borrow - conver it from the available amount  from the ETH available
     const amountDaiToBorrow = availableBorrowsETH.toString() * 0.95 * (1 / daiPrice.toNumber())
     console.log(`You can borrow ${amountDaiToBorrow} DAI`)
-    console.log(amountDaiToBorrow)
     const amountDaiToBorrowWei = ethers.utils.parseEther(amountDaiToBorrow.toString())
-    await borrowDai(
-        networkConfig[network.config.chainId]["daiToken"],
-        lendingPool,
-        amountDaiToBorrowWei,
-        deployer
-    )
+    const daiTokenAddress = networkConfig[network.config.chainId]["daiToken"]
+    await borrowDai(daiTokenAddress, lendingPool, amountDaiToBorrowWei, deployer)
 
     await getBorrowUserData(lendingPool, deployer)
+    await repay(amountDaiToBorrowWei, daiTokenAddress, lendingPool, deployer)
+    await getBorrowUserData(lendingPool, deployer)
+}
+
+async function repay(amount, daiAddress, lendingPool, account) {
+    const lendingPoolAddress = await lendingPool.address
+    await approveErc20(daiAddress, lendingPoolAddress, amount, account)
+    const repayTx = await lendingPool.repay(daiAddress, amount, 1, account)
+    await repayTx.wait(1)
+    console.log("Repaid!")
 }
 
 async function borrowDai(daiAddress, lendingPool, amountDaiToBorrowWei, account) {
