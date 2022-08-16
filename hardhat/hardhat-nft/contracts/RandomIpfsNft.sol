@@ -5,9 +5,11 @@ pragma solidity ^0.8.7;
 import "@chainlink/contracts/src/v0.8/interfaces/VRFCoordinatorV2Interface.sol";
 import "@chainlink/contracts/src/v0.8/VRFConsumerBaseV2.sol";
 import "@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol";
+import "@openzeppelin/contracts/access/Ownable.sol";
 
 error RandomIpfsNft__RangeOutOfBounds();
-
+error RandomIpfsNft__NeedMoreETHSent();
+error RandomIpfsNft__TransferFailed();
 /**
 	when we mint an NFT, we will trigger a Chainlink VRF call to get us a random number
 	using that number, we will get a random NFT
@@ -15,7 +17,7 @@ error RandomIpfsNft__RangeOutOfBounds();
 	users have to pay to mint an NFT
 	The owner of the contract can withdraw the ETH
  */
-contract RandomIpfsNft is VRFConsumerBaseV2,ERC721URIStorage {
+contract RandomIpfsNft is VRFConsumerBaseV2,ERC721URIStorage,Ownable {
 	
     VRFCoordinatorV2Interface immutable private i_vrfCoordinator;
 		uint64 private immutable i_subscriptionId;
@@ -31,7 +33,7 @@ contract RandomIpfsNft is VRFConsumerBaseV2,ERC721URIStorage {
 		uint256 public s_tokenCounter;
 		uint256 internal constant MAX_CHANCE_VALUE = 100;
 		string[] internal s_dogTokenUris; // we will pass the dog URI's in the constructor
-
+		uint256 internal immutable i_mintFee
 
 		//Type Declaration
 		enum Breed {
@@ -45,7 +47,8 @@ contract RandomIpfsNft is VRFConsumerBaseV2,ERC721URIStorage {
 	 uint64 subscriptionId,
 	 bytes32 gasLane,
 	 uint32 callbackGasLimit
-	 string[3] memory dogTokenUris
+	 string[3] memory dogTokenUris,
+	 uint256 mintFee
 	)
 
 	 	VRFConsumerBaseV2(vrfCoordinatorV2) 
@@ -55,9 +58,13 @@ contract RandomIpfsNft is VRFConsumerBaseV2,ERC721URIStorage {
 		i_gasLane = gasLane;
 		i_callbackGasLimit = callbackGasLimit;
 		s_dogTokenUris = dogTokenUris;
+		i_mintFee = mintFee;
 	}
 
-	function requestNft() public returns (uint256 requestId) {  // kick off a chainLink vrf request
+	function requestNft() public returns (uint256 requestId) { // kick off a chainLink vrf reques
+		if(msg.value < i_mintFee) { 
+			revert RandomIpfsNft__NeedMoreETHSent();
+		}
 		requestId = i_vrfCoordinator.requestRandomWords(
 			i_gasLane,
 			i_subscriptionId,
@@ -81,6 +88,12 @@ contract RandomIpfsNft is VRFConsumerBaseV2,ERC721URIStorage {
 		/* set this token this URI */
 		_setTokenURI(newTokenId, s_dogTokenUris[uint256(dogBreed)] ); //casting the dog breed into uint256 to get its index
 		s_tokenCounter = s_tokenCounter + 1;
+	}
+
+	function withdraw() public onlyOwner {
+		uint256 amount = address(this).balance;
+		(bool success,) =payable(msg.sender).call({value:amount})("");
+		if(!success) {revert RandomIpfsNft__TransferFailed()}
 	}
 
 	function getBreedFromModdedRng(uint256 moddedRng) public pure return(Breed) {
