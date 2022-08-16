@@ -13,9 +13,13 @@ string public constant TOKEN_URI =
 			s_tokenCounter = 0;
 		}
 
-		function mintNft() public return(uint256) { 
+		function mintNft() public returns(uint256) {
 			_safeMint(msg.sender, s_tokenCounter);
 			s_tokenCounter = s_tokenCounter + 1;
+		}
+
+		function tokenURI(uint256 /*tokenId*/) public view override returns(string memory) {
+			return TOKEN_URI;
 		}
 
 		function getTokenCounter() public view returns(uint256) {
