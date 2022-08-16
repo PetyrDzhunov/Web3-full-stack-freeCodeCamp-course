@@ -30,7 +30,8 @@ contract RandomIpfsNft is VRFConsumerBaseV2,ERC721URIStorage {
 		//NFT variables
 		uint256 public s_tokenCounter;
 		uint256 internal constant MAX_CHANCE_VALUE = 100;
-		string[] internal s_dogTokenUris;
+		string[] internal s_dogTokenUris; // we will pass the dog URI's in the constructor
+
 
 		//Type Declaration
 		enum Breed {
@@ -77,7 +78,8 @@ contract RandomIpfsNft is VRFConsumerBaseV2,ERC721URIStorage {
 
 		Breed dogBreed = getBreedFromModdedRng(moddedRng)
 		_safeMint(dogOwner,newTokenId);
-		_setTokenURI(newTokenId, )
+		/* set this token this URI */
+		_setTokenURI(newTokenId, s_dogTokenUris[uint256(dogBreed)] ); //casting the dog breed into uint256 to get its index
 		s_tokenCounter = s_tokenCounter + 1;
 	}
 
