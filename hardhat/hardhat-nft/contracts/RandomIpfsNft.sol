@@ -4,9 +4,9 @@ pragma solidity ^0.8.7;
 
 import "@chainlink/contracts/src/v0.8/interfaces/VRFCoordinatorV2Interface.sol";
 import "@chainlink/contracts/src/v0.8/VRFConsumerBaseV2.sol";
-import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
+import "@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol";
 
-error RandomIpfsNft__RangeOutOfBounds;
+error RandomIpfsNft__RangeOutOfBounds();
 
 /**
 	when we mint an NFT, we will trigger a Chainlink VRF call to get us a random number
@@ -15,7 +15,8 @@ error RandomIpfsNft__RangeOutOfBounds;
 	users have to pay to mint an NFT
 	The owner of the contract can withdraw the ETH
  */
-
+contract RandomIpfsNft is VRFConsumerBaseV2,ERC721URIStorage {
+	
     VRFCoordinatorV2Interface immutable private i_vrfCoordinator;
 		uint64 private immutable i_subscriptionId;
 		bytes private immutable i_gasLane;
@@ -29,6 +30,7 @@ error RandomIpfsNft__RangeOutOfBounds;
 		//NFT variables
 		uint256 public s_tokenCounter;
 		uint256 internal constant MAX_CHANCE_VALUE = 100;
+		string[] internal s_dogTokenUris;
 
 		//Type Declaration
 		enum Breed {
@@ -37,12 +39,12 @@ error RandomIpfsNft__RangeOutOfBounds;
 			ST.BERNARD
 		};
 
-contract RandomIpfsNft is VRFConsumerBaseV2,ERC721 {
-
-	constructor(address vrfCoordinatorV2,
+	constructor(
+	 address vrfCoordinatorV2,
 	 uint64 subscriptionId,
 	 bytes32 gasLane,
 	 uint32 callbackGasLimit
+	 string[3] memory dogTokenUris
 	)
 
 	 	VRFConsumerBaseV2(vrfCoordinatorV2) 
@@ -51,6 +53,7 @@ contract RandomIpfsNft is VRFConsumerBaseV2,ERC721 {
 	  i_subscriptionId = subscriptionId;
 		i_gasLane = gasLane;
 		i_callbackGasLimit = callbackGasLimit;
+		s_dogTokenUris = dogTokenUris;
 	}
 
 	function requestNft() public returns (uint256 requestId) {  // kick off a chainLink vrf request
@@ -69,11 +72,12 @@ contract RandomIpfsNft is VRFConsumerBaseV2,ERC721 {
 		address dogOwner = s_requestIdToSender[requestId];
 		// mint this random NFT(dog) for this user and save it to his account/address
 		uint256 newTokenId = s_tokenCounter;
-		_safeMint(dogOwner,newTokenId);
 		//What does this token look like?
 		uint256 moddedRng = randomWords[0] % MAX_CHANCE_VALUE;// between 0-99
 
-		getBreedFromModdedRng()
+		Breed dogBreed = getBreedFromModdedRng(moddedRng)
+		_safeMint(dogOwner,newTokenId);
+		_setTokenURI(newTokenId, )
 		s_tokenCounter = s_tokenCounter + 1;
 	}
 
