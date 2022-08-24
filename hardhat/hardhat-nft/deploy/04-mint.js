@@ -2,9 +2,8 @@ const { network, ethers } = require("hardhat")
 
 module.exports = async ({ getNamedAccounts, deployments }) => {
     const { deployer } = await getNamedAccounts()
-    const chainId = network.config.chainId
 
-    console.log(chainId)
+    const chainId = network.config.chainId
 
     // Basic NFT
     const basicNft = await ethers.getContract("BasicNft", deployer)
@@ -14,11 +13,10 @@ module.exports = async ({ getNamedAccounts, deployments }) => {
     console.log(`Basic NFT index 0 tokenURI: ${await basicNft.tokenURI(0)}`)
 
     // Dynamic SVG  NFT
-    const highValue = ethers.utils.parseEther("4000")
+    const highValue = ethers.utils.parseEther("1600")
     const dynamicSvgNft = await ethers.getContract("DynamicSvgNft", deployer)
     const dynamicSvgNftMintTx = await dynamicSvgNft.mintNft(highValue)
     await dynamicSvgNftMintTx.wait(1)
-    console.log(dynamicSvgNft)
     console.log(`Dynamic SVG NFT index 0 tokenURI: ${await dynamicSvgNft.tokenURI(0)}`)
 
     // Random IPFS NFT
@@ -35,6 +33,8 @@ module.exports = async ({ getNamedAccounts, deployments }) => {
         })
         if (chainId == 31337) {
             const requestId = randomIpfsNftMintTxReceipt.events[1].args.requestId.toString()
+            console.log(requestId)
+            console.log(randomIpfsNft.address)
             const vrfCoordinatorV2Mock = await ethers.getContract("VRFCoordinatorV2Mock", deployer)
             await vrfCoordinatorV2Mock.fulfillRandomWords(requestId, randomIpfsNft.address)
         }
