@@ -25,8 +25,17 @@ contract NftMarketplace {
 		uint256 price
 	);
 
+	event ItemBought(
+		address indexed buyer,
+		address indexed nftAddress,
+		uint256 indexed tokenId,
+		uint256 price
+	)
+
 	// NFT Contract address -> NFT TokenID -> Listing
 	mapping(address => mapping(uint256 => Listing)) private s_listings;
+	// Seller address -> Amount earned
+	mapping(address => uint256) private s_proceeds;
 
 	//////////////////////
 	// Modifiers        //
@@ -91,8 +100,16 @@ contract NftMarketplace {
 	isListed(nftAddress,tokenId) { 
 		listing memory listedItem = s_listings[nftAddress][tokenId];
 		if(msg.value < listedItem.price) {
-			revert PriceNotMet(nftAddress,tokenId,listedItem.price);
+			revert NftMarketplace_PriceNotMet(nftAddress,tokenId,listedItem.price);
 		}
+	 // We don't just send the seller the money...?
+	 // Pull over push solidity concept - best practice when working with Solidity
+
+		s_proceeds[listedItem.seller] = s_proceeds[listedItem.seller] + msg.value;
+		delete (s_listings[nftAddress][tokenId]);
+		IERC721(nftAddress).safeTransferFrom(listedItem.seller,msg.sender,tokenId);
+		emit ItemBought(msg.sender,nftAddress,tokenId,listedItem.price);
+
 	}
 	
 }
