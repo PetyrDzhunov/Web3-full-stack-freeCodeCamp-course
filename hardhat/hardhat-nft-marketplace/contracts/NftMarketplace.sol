@@ -7,6 +7,7 @@ import "@openzeppelin/contracts/token/ERC721/IERC721.sol";
 error NftMarketplace__PriceMustBeAboveZero();
 error NftMarketPlace__NotApprovedForMarketplace();
 error NftMarketplace__AlreadyListed(address nftAddress,uint256 tokenId);
+error Marketplace__NotOwner();
 
 contract NftMarketplace {
 
@@ -36,12 +37,22 @@ contract NftMarketplace {
 		_;
 	}
 
+	modifier isOwner(address nftAddress,uint256 tokenId,address spender) {
+		IERC721 nft = IERC721(nftAddress);
+		address owner = nft.ownerOf(tokenId);
+		if(spender != owner) {
+			 revert Marketplace__NotOwner();
+		}
+		_;
+	}
+
 	//////////////////////
 	// Main Functions //
 	/////////////////////
 
 	function listItem(address nftAddress, uint256 tokenId, uint256 price) external 
-	notListed(nftAddress,tokenId,msg.sender) {
+	notListed(nftAddress,tokenId,msg.sender)
+	isOwner(nftAddress,tokenId,msg.sender) {
 		if(price <=0) {
 			revert NftMarketplace__PriceMustBeAboveZero();
 		}
