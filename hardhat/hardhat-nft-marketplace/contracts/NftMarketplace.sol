@@ -7,6 +7,7 @@ import "@openzeppelin/contracts/token/ERC721/IERC721.sol";
 error NftMarketplace__PriceMustBeAboveZero();
 error NftMarketPlace__NotApprovedForMarketplace();
 error NftMarketplace__AlreadyListed(address nftAddress,uint256 tokenId);
+error NftMarketplace__NotListed(address nftAddress,uint256 tokenId);
 error Marketplace__NotOwner();
 
 contract NftMarketplace {
@@ -46,9 +47,26 @@ contract NftMarketplace {
 		_;
 	}
 
+	modifier isListed(address nftAddress, uint256 tokenId) {
+		Listing memory listing = s_listings[nftAddress][tokenId];
+		if(listing.price <= 0) {
+			revert NftMarketplace__NotListed(nftAddress,tokenId);
+		}
+		_;
+	}
+
 	//////////////////////
 	// Main Functions //
 	/////////////////////
+
+	/*
+	* @notice Method for listing your NFT on the marketplace
+	* @param nftAddress: Adress of the NFT
+	* @param tokenId: The Token ID of the NFT
+	* @param price: sale price of the listed NFT
+	* @dev Technically, we could have the contract be the escrow for the NFTs
+	* but this way people can still hold their NFTs when listed.
+	*/
 
 	function listItem(address nftAddress, uint256 tokenId, uint256 price) external 
 	notListed(nftAddress,tokenId,msg.sender)
@@ -67,6 +85,10 @@ contract NftMarketplace {
 		emit ItemListed(msg.sender,nftAddress,tokenId,price);
 	}
 
+
+	function buyItem(address nftAddress,uint256 tokenId) external payable { 
+
+	}
 	
 }
 
