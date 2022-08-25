@@ -28,4 +28,4 @@ contract BasicNft is ERC721 {
     function getTokenCounter() public view returns (uint256) {
         return s_tokenCounter;
     }
-}
+}  
