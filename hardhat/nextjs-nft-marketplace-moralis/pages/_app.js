@@ -18,6 +18,7 @@ function MyApp({ Component, pageProps }) {
         <Header />
         <Component {...pageProps} />
       </MoralisProvider>
+      <div>Hellos</div>
     </div>
   );
 }
