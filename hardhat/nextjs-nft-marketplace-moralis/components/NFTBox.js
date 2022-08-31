@@ -58,16 +58,20 @@ export default function NFTBox({
       <div>
         {imageURI ? (
           <Card title={tokenName} description={tokenDescription}>
-            <div>#{tokenId}</div>
-            <div className='italic text-sm'>Owned by {seller}</div>
-            <Image
-              loader={() => imageURI}
-              src={imageURI}
-              height='200'
-              width='200'
-            />
-            <div className='font-bold'>
-              {ethers.utils.formatUnits(price, 'ether')} ETH
+            <div className='p-2'>
+              <div className='flex flex-col items-end gap-2'>
+                <div>#{tokenId}</div>
+                <div className='italic text-sm'>Owned by {seller}</div>
+                <Image
+                  loader={() => imageURI}
+                  src={imageURI}
+                  height='200'
+                  width='200'
+                />
+                <div className='font-bold'>
+                  {ethers.utils.formatUnits(price, 'ether')} ETH
+                </div>
+              </div>
             </div>
           </Card>
         ) : (
