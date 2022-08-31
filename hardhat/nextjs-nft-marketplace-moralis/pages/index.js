@@ -1,5 +1,6 @@
 import styles from '../styles/Home.module.css';
 import { useMoralisQuery } from 'react-moralis';
+import NFTBox from '../components/NFTBox';
 
 export default function Home() {
   //We will index the events off-chain and then read from our database.
@@ -18,13 +19,17 @@ export default function Home() {
         <div>Loading...</div>
       ) : (
         listedNfts.map((nft) => {
-          const { price, nftAddress, tokenId, marketPlaceAddress, seller } =
+          const { price, nftAddress, tokenId, marketplaceAddress, seller } =
             nft.attributes;
           return (
-            <div>
-              Price: {price}. NftAddress: {nftAddress}. TokenId: {tokenId}{' '}
-              Seller: {seller}
-            </div>
+            <NFTBox
+              price={price}
+              nftAddress={nftAddress}
+              tokenId={tokenId}
+              marketplaceAddress={marketplaceAddress}
+              seller={seller}
+              key={`${nftAddress}${tokenId}`}
+            />
           );
         })
       )}
