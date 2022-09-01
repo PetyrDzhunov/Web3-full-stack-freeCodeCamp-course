@@ -19,6 +19,7 @@ export default function SellPage() {
 
   async function approveAndList(data) {
     console.log('Approving...');
+    console.log(data);
     const nftAdrress = data.data[0].inputResult;
     const tokenId = data.data[1].inputResult;
     const price = ethers.utils
@@ -36,7 +37,7 @@ export default function SellPage() {
     };
 
     await runContractFunction({
-      params: approveAndList,
+      params: approveOptions,
       onSuccess: () => handleApproveSuccess(nftAdrress, tokenId, price),
       onError: (error) => console.log(error),
     });
