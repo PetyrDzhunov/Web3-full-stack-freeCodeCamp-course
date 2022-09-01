@@ -35,6 +35,8 @@ export default function NFTBox({
   const [tokenDescription, setTokenDescription] = useState('');
   const [showModal, setShowModal] = useState(false);
 
+  const hideModal = () => setShowModal(false);
+
   const handleCardClick = () => {
     isOwnedByUser ? setShowModal(true) : console.log('buy');
   };
@@ -84,7 +86,13 @@ export default function NFTBox({
       <div>
         {imageURI ? (
           <div className='m-4'>
-            <UpdateListingModal isVisible={showModal} />
+            <UpdateListingModal
+              isVisible={showModal}
+              tokenId={tokenId}
+              marketplaceAddress={marketplaceAddress}
+              nftAddress={nftAddress}
+              onClose={hideModal}
+            />
             <Card
               title={tokenName}
               description={tokenDescription}
