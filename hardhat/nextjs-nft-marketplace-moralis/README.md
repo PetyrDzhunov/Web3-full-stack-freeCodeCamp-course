@@ -5,6 +5,7 @@
 2. Sell Page:
 
    1. You can list your NFT on the marketplace
+   2. And withdraw proceeds
 
    Moralis: How do we tell it to listen to our events?
 
