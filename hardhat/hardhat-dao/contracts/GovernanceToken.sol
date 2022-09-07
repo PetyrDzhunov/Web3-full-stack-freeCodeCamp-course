@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: MIT
 
-pragma soliditiy ^0.8.8;
+pragma solidity ^0.8.8;
 
 import "@openzeppelin/contracts/token/ERC20/extensions/ERC20Votes.sol";
 
@@ -16,11 +16,11 @@ contract GovernanceToken is ERC20Votes {
 
 		function _afterTokenTransfer(address from, address to , uint256 amount)
 		internal override(ERC20Votes){
-			super._afterTokenTransfer(from,to,amount)
+			super._afterTokenTransfer(from,to,amount);
 		}
 
 		function _mint(address to,uint256 amount) internal override(ERC20Votes) {
-			super._mint(to,amount)
+			super._mint(to,amount);
 		}
 
 		function _burn(address account, uint256 amount) internal override(ERC20Votes) {
